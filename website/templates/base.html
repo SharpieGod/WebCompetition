@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Page{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='bootstrap-5.3.0/css/bootstrap.css')}}" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Grade Tracker</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            {% if user.parent == 1 %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Children
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a class="dropdown-item" href="/manage-child"
+                    >Manage Children</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/add-child">Add Child</a>
+                </li>
+              </ul>
+            </li>
+            {% endif %} {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sign-up">Sign Up</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="alert alert-danger alert-dismissable fade show" role="alert">
+      <p class="align-self-center my-auto d-inline-block">{{ message }}</p>
+      <div class="clearfix my-auto d-inline">
+        <button
+          type="button"
+          class="btn-close alert-dismissible float-end"
+          data-dismiss="alert"></button>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+      <p class="align-self-center my-auto d-inline-block">{{ message }}</p>
+      <div class="clearfix my-auto d-inline">
+        <button
+          type="button"
+          class="btn-close alert-dismissible float-end"
+          data-dismiss="alert"></button>
+      </div>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <div class="container mx-auto pt-4">{% block content %}{% endblock %}</div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='bootstrap-5.3.0/js/bootstrap.bundle.js')}}"></script>
+  </body>
+</html>

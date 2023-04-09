@@ -1,0 +1,6 @@
+{% extends 'base.html'%} {% block title %}Home{% endblock %} {% block content %}
+<h1 class="border-dark py-4 my-1 text-center">
+  Welcome to the home page, {{ user.first_name }}.<br />
+  {% if user.parent == 1%}You are a parent{% else %}You are a child{% endif %}.
+</h1>
+{% endblock %}

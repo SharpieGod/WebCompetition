@@ -1,0 +1,59 @@
+{% extends 'base.html'%} {% block title %}Add Child{% endblock %} {% block
+content %}
+<h1 class="border-dark py-4 my-1 text-center">Add Child</h1>
+<form method="POST" class="w-75 mx-auto">
+  <div class="form-group mt-3">
+    <label for="child_email">Child's Email</label>
+    <input
+      type="email"
+      class="form-control"
+      id="child_email"
+      name="child_email"
+      placeholder="Enter child's email" />
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group mt-3">
+        <label for="childFirstName">Child's First Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="childFirstName"
+          name="childFirstName"
+          placeholder="Enter child's first name" />
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group mt-3">
+        <label for="childLastName">Child's Last Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="childLastName"
+          name="childLastName"
+          placeholder="Enter child's last name" />
+      </div>
+    </div>
+  </div>
+  <div class="form-group mt-3">
+    <label for="child_password">Child's Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="child_password"
+      name="child_password"
+      placeholder="Enter your child's password" />
+  </div>
+  <div class="form-group mt-3">
+    <label for="parent_password">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="parent_password"
+      name="parent_password"
+      placeholder="Enter your password" />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary mt-3">Add Child</button>
+</form>
+{% endblock %}

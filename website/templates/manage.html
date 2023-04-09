@@ -1,0 +1,24 @@
+{% extends 'base.html'%} {% block title %}Manage{% endblock %} {% block content
+%}
+<h1 class="py-4 my-1 text-center">
+  Welcome to the manage page, {{ user.first_name }}.<br />
+</h1>
+<ul class="nav nav-tabs">
+  {% for child in children %} {% if child.id == active_child.id %}
+  <li class="nav-item">
+    <a
+      href="http://127.0.0.1:5000/manage-child/{{ child.id }}"
+      class="nav-link active"
+      >{{ child.first_name }}</a
+    >
+  </li>
+  {% else %}
+  <li class="nav-item">
+    <a href="http://127.0.0.1:5000/manage-child/{{ child.id }}" class="nav-link"
+      >{{ child.first_name }}</a
+    >
+  </li>
+  {% endif %} {% endfor %}
+</ul>
+<h1 class="text-center my-1 p-3">Manage {{ active_child.first_name }}</h1>
+{% endblock %}
