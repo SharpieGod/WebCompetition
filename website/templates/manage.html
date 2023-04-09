@@ -7,14 +7,14 @@
   {% for child in children %} {% if child.id == active_child.id %}
   <li class="nav-item">
     <a
-      href="http://127.0.0.1:5000/manage-child/{{ child.id }}"
+      href="{{ url_for('views.manage', child_id=child.id)}}"
       class="nav-link active"
       >{{ child.first_name }}</a
     >
   </li>
   {% else %}
   <li class="nav-item">
-    <a href="http://127.0.0.1:5000/manage-child/{{ child.id }}" class="nav-link"
+    <a href="{{ url_for('views.manage', child_id=child.id)}}" class="nav-link"
       >{{ child.first_name }}</a
     >
   </li>
