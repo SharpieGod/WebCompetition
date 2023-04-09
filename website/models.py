@@ -15,11 +15,15 @@ class ParentRelationship(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     child_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+class GradeRelationship(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    child_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    grade_id = db.Column(db.Integer, db.ForeignKey('grade.id'))
+
 class Grade(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     grade = db.Column(db.Enum(GradeEnum))
-    parent_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150))

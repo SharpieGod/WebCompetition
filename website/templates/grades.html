@@ -1,0 +1,9 @@
+{% extends 'base.html'%} {% block title %}Grades{% endblock %} {% block content
+%}
+<h1 class="text-center mx-auto mt-4">Grades</h1>
+<ul class="list-group">
+  {% for grade in grades %}
+  <li class="list-group-item">{{ grade.grade }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

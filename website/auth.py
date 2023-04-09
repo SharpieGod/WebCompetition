@@ -75,9 +75,12 @@ def add_child():
 
             users = User.query.filter_by(email=child_email, first_name=child_first_name, last_name=child_last_name, parent=0)
             user = [x for x in users if check_password_hash(x.password, child_password)]
-            child_user = user[0]
+            child_user = None
 
-            if child_user: 
+            if user:
+                child_user = user[0]
+
+            if child_user is not None: 
                 if check_password_hash(child_user.password, child_password):
                     if check_password_hash(current_user.password, parent_password):
                         if ParentRelationship.query.filter_by(parent_id=current_user.id, child_id=child_user.id).first() is None:
