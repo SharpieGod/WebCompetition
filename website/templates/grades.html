@@ -1,9 +1,20 @@
 {% extends 'base.html'%} {% block title %}Grades{% endblock %} {% block content
 %}
-<h1 class="text-center mx-auto mt-4">Grades</h1>
-<ul class="list-group">
+<h1 class="text-center mx-auto my-4">Grades</h1>
+{% if grades != [] %}
+<div class="row row-cols-md-2 row-cols-lg-3 mx-auto mt-5 pt-3">
   {% for grade in grades %}
-  <li class="list-group-item">{{ grade.grade }}</li>
+  <div class="col">
+    <div class="card mx-auto mb-4" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">{{ grade.subject }}</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+          {{ grade.grade.value }}
+        </h6>
+        <p class="card-text">{{ grade.grade_comment }}</p>
+      </div>
+    </div>
+  </div>
   {% endfor %}
-</ul>
-{% endblock %}
+</div>
+{% endif %} {% endblock %}
