@@ -9,7 +9,7 @@ class GradeEnum(Enum):
     A = 'Applying'
     D = 'Developing'
     B = 'Beginning'
-    I = 'InsufficientEvidence'
+    I = 'Insufficient Evidence'
 
 
 class ParentRelationship(db.Model):

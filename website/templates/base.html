@@ -7,7 +7,8 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='bootstrap-5.3.0/css/bootstrap.css')}}" />
+      href="{{ url_for('static', filename='bootstrap-5.3.0/css/bootstrap.css')}}"
+    />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -20,7 +21,8 @@
           data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
-          aria-label="Toggle navigation">
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -39,7 +41,8 @@
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false">
+                aria-expanded="false"
+              >
                 Children
               </a>
               <ul class="dropdown-menu dropdown-menu-dark">
@@ -60,7 +63,8 @@
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false">
+                aria-expanded="false"
+              >
                 Grades
               </a>
               <ul class="dropdown-menu dropdown-menu-dark">
@@ -93,7 +97,8 @@
         <button
           type="button"
           class="btn-close alert-dismissible float-end"
-          data-dismiss="alert"></button>
+          data-dismiss="alert"
+        ></button>
       </div>
     </div>
     {% else %}
@@ -103,7 +108,8 @@
         <button
           type="button"
           class="btn-close alert-dismissible float-end"
-          data-dismiss="alert"></button>
+          data-dismiss="alert"
+        ></button>
       </div>
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
@@ -111,17 +117,21 @@
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <script
       type="text/javascript"
-      src="{{ url_for('static', filename='bootstrap-5.3.0/js/bootstrap.bundle.js')}}"></script>
+      src="{{ url_for('static', filename='bootstrap-5.3.0/js/bootstrap.bundle.js')}}"
+    ></script>
   </body>
 </html>

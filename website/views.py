@@ -63,6 +63,7 @@ def add_grade():
                     db.session.add(new_grade_relationship)
                     db.session.commit()
                     flash('Added grade successfully.', category='success')
+                    return redirect(url_for('views.grades'))
                 else:
                     flash('You must include a grade comment.', category='error')
             else:
@@ -91,6 +92,11 @@ def manage(child_id):
         children = [User.query.filter_by(
             id=x.child_id).first() for x in children]
         active_child = User.query.filter_by(id=child_id).first()
-        return render_template('manage.html', user=current_user, children=children, active_child=active_child)
+        grade_relationships = GradeRelationship.query.filter_by(
+            child_id=active_child.id)
+        grades = [Grade.query.filter_by(id=x.grade_id).first()
+                  for x in grade_relationships]
+
+        return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades)
     else:
         return redirect('views.home')

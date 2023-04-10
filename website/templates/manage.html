@@ -20,5 +20,15 @@
   </li>
   {% endif %} {% endfor %}
 </ul>
-<h1 class="text-center my-1 p-3">Manage {{ active_child.first_name }}</h1>
+<h1 class="text-center my-4 p-3">Manage {{ active_child.first_name }}</h1>
+<div class="card w-50 mx-auto">
+  <ul class="list-group list-group-flush">
+    {% for grade in grades %}
+    <li class="list-group-item">
+      <h3 class="card-title text-center mt-3">{{ grade.subject }}</h3>
+      <div class="card-body text-center fs-4">{{ grade.grade.value }}</div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}
