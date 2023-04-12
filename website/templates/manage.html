@@ -14,21 +14,30 @@
   </li>
   {% else %}
   <li class="nav-item">
-    <a href="{{ url_for('views.manage', child_id=child.id)}}" class="nav-link"
+    <a href="{{ url_for('views.manage', child_id=child.id, **request.args)}}" class="nav-link"
       >{{ child.first_name }}</a
     >
   </li>
   {% endif %} {% endfor %}
 </ul>
 <h1 class="text-center my-4 p-3">Manage {{ active_child.first_name }}</h1>
+{% if grades %}
 <div class="card w-50 mx-auto">
   <ul class="list-group list-group-flush">
     {% for grade in grades %}
     <li class="list-group-item">
-      <h3 class="card-title text-center mt-3">{{ grade.subject }}</h3>
-      <div class="card-body text-center fs-4">{{ grade.grade.value }}</div>
+      <div class="row row-cols-lg-2 row-cols-sm-1">
+        <div class="row">
+          <h3 class="card-title text-center mt-3">{{ grade.subject }}</h3>
+          <div class="card-body text-center fs-4">{{ grade.grade.value }}</div>
+        </div>
+        <div class="card-body text-center fs-5 my-auto">{{ grade.grade_comment }}</div>
+      </div>
     </li>
     {% endfor %}
   </ul>
 </div>
+{% else %}
+<h1 class="text-center mx-auto my-4 p-3">{{ active_child.first_name }} doesn't seem to have any grades published yet</h1>
+{% endif %}
 {% endblock %}

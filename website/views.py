@@ -20,7 +20,7 @@ def manage_child():
         else:
             relationship = ParentRelationship.query.filter_by(
                 parent_id=current_user.id).first()
-            child_id = relationship.id
+            child_id = relationship.child_id
             return redirect(url_for('views.manage', child_id=child_id))
 
 
@@ -87,6 +87,7 @@ def add_grade():
 @login_required
 def manage(child_id):
     if current_user.parent:
+        subject_filter = request.args.get('filter')
         children = [x for x in ParentRelationship.query.filter_by(
             parent_id=current_user.id)]
         children = [User.query.filter_by(
@@ -96,6 +97,10 @@ def manage(child_id):
             child_id=active_child.id)
         grades = [Grade.query.filter_by(id=x.grade_id).first()
                   for x in grade_relationships]
+        
+        if subject_filter:
+            grades = [x for x in grades if x.subject == subject_filter]
+            print(grades)
 
         return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades)
     else:
