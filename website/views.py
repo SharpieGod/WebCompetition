@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import User, ParentRelationship, db, GradeRelationship, Grade, GradeEnum
+from werkzeug.datastructures import MultiDict
+import json
 
 views = Blueprint('views', __name__)
 
@@ -78,16 +80,31 @@ def add_grade():
                   GradeEnum.D, GradeEnum.B, GradeEnum.I]
         subject_options = ["Math", "Science",    "English",    "Social Studies",    "History",    "Geography",    "World History",    "US History",    "European History",    "Asian Studies",    "Latin American Studies",    "African Studies",    "Physical Education",    "Health",    "Art",    "Music",    "Drama",    "Theater",    "Film Studies",    "Media Studies",    "Journalism",    "Creative Writing",    "Computer Science",    "Programming",    "Web Development",
                            "Data Science",    "Statistics",    "Business",    "Economics",    "Marketing",    "Accounting",    "Finance",    "Foreign Languages",    "Spanish",    "French",    "German",    "Italian",    "Chinese",    "Japanese",    "Korean",    "Arabic",    "Hebrew",    "Russian",    "Portuguese",    "Biology",    "Chemistry",    "Physics",    "Environmental Science",    "Psychology",    "Sociology",    "Anthropology",    "Philosophy",    "Religious Studies"]
+        subject_options = sorted(subject_options)
         return render_template('add-grade.html', user=current_user, grade_options=grade_options, subject_options=subject_options, grades=grades)
     else:
         return redirect(url_for('views.home'))
 
 
-@views.route('/manage-child/<int:child_id>')
+@views.route('/manage-child/<int:child_id>', methods=['GET', 'POST'])
 @login_required
 def manage(child_id):
+    args = MultiDict()
+    subject_filter = request.args.get('subjectFilter')
+    grade_filter = request.args.get('gradeFilter')
+
+    if request.method == 'POST':
+        subject_filter = request.form.get('subject_filter')
+        grade_filter = request.form.get('grade_filter')
+        if subject_filter:
+            args['subjectFilter'] = subject_filter
+
+        if grade_filter:
+            args['gradeFilter'] = grade_filter
+
+        return redirect(url_for('views.manage', **args.to_dict(flat=False), child_id=child_id))
+
     if current_user.parent:
-        subject_filter = request.args.get('filter')
         children = [x for x in ParentRelationship.query.filter_by(
             parent_id=current_user.id)]
         children = [User.query.filter_by(
@@ -97,11 +114,35 @@ def manage(child_id):
             child_id=active_child.id)
         grades = [Grade.query.filter_by(id=x.grade_id).first()
                   for x in grade_relationships]
-        
-        if subject_filter:
-            grades = [x for x in grades if x.subject == subject_filter]
-            print(grades)
+        grade_options = ['Extending', 'Applying',
+                         'Developing', 'Beginning', 'Insufficient Evidence']
 
-        return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades)
+        subject_options = ["Math", "Science",    "English",    "Social Studies",    "History",    "Geography",    "World History",    "US History",    "European History",    "Asian Studies",    "Latin American Studies",    "African Studies",    "Physical Education",    "Health",    "Art",    "Music",    "Drama",    "Theater",    "Film Studies",    "Media Studies",    "Journalism",    "Creative Writing",    "Computer Science",    "Programming",    "Web Development",
+                           "Data Science",    "Statistics",    "Business",    "Economics",    "Marketing",    "Accounting",    "Finance",    "Foreign Languages",    "Spanish",    "French",    "German",    "Italian",    "Chinese",    "Japanese",    "Korean",    "Arabic",    "Hebrew",    "Russian",    "Portuguese",    "Biology",    "Chemistry",    "Physics",    "Environmental Science",    "Psychology",    "Sociology",    "Anthropology",    "Philosophy",    "Religious Studies"]
+        subject_options = sorted(subject_options)
+
+        if subject_filter:
+            args["subjectFilter"] = subject_filter
+            grades = [x for x in grades if x.subject == subject_filter]
+
+        if grade_filter:
+            args["gradeFilter"] = grade_filter
+            grades = [x for x in grades if x.grade.value == grade_filter]
+
+        grades = [x for x in grades if x != None]
+
+        return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
+
+
+@views.route('/delete-grade', methods=['POST'])
+def delete_grade():
+    grade = json.loads(request.data)
+    gradeId = grade['gradeId']
+    grade = Grade.query.get(gradeId)
+    if grade:
+        db.session.delete(grade)
+        db.session.commit()
+
+    return jsonify({})

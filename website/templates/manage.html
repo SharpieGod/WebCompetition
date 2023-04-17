@@ -1,20 +1,56 @@
 {% extends 'base.html'%} {% block title %}Manage{% endblock %} {% block content
 %}
-<h1 class="py-4 my-1 text-center">
+<h1 class="py-4 my-1 text-center mb-3">
   Welcome to the manage page, {{ user.first_name }}.<br />
 </h1>
+<form method="POST" class="w-75 mx-auto">
+  <div class="row">
+    <div class="col">
+      <select
+        name="subject_filter"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option value="" selected>Select Subject Filter</option>
+        {% for subject in subjects %}
+        <option value="{{ subject }}">{{ subject }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col">
+      <select
+        name="grade_filter"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option value="" selected>Select Grade Filter</option>
+        {% for grade_option in grade_options %}
+        <option value="{{ grade_option }}">{{ grade_option }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Filter</button>
+  </div>
+</form>
+<br />
+
 <ul class="nav nav-tabs">
   {% for child in children %} {% if child.id == active_child.id %}
   <li class="nav-item">
     <a
-      href="{{ url_for('views.manage', child_id=child.id)}}"
+      href="{{ url_for('views.manage', child_id=child.id, **request.args)}}"
       class="nav-link active"
       >{{ child.first_name }}</a
     >
   </li>
   {% else %}
   <li class="nav-item">
-    <a href="{{ url_for('views.manage', child_id=child.id, **request.args)}}" class="nav-link"
+    <a
+      href="{{ url_for('views.manage', child_id=child.id, **request.args)}}"
+      class="nav-link"
       >{{ child.first_name }}</a
     >
   </li>
@@ -27,17 +63,60 @@
     {% for grade in grades %}
     <li class="list-group-item">
       <div class="row row-cols-lg-2 row-cols-sm-1">
-        <div class="row">
+        <div class="row me-2">
           <h3 class="card-title text-center mt-3">{{ grade.subject }}</h3>
           <div class="card-body text-center fs-4">{{ grade.grade.value }}</div>
         </div>
-        <div class="card-body text-center fs-5 my-auto">{{ grade.grade_comment }}</div>
+        <div class="row row-cols-1">
+          <div class="col my-auto">
+            <div class="card-body text-center fs-5 my-auto">
+              {{ grade.grade_comment }}
+            </div>
+          </div>
+          <div class="col">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col">
+                <div class="clearfix px-3 my-3 w-75 mx-auto">
+                  <button
+                    type="button"
+                    class="close btn btn-outline-secondary"
+                    onClick="deleteGrade({{ grade.id }})"
+                  >
+                    <img
+                      src="{{ url_for('static', filename='images/delete.svg')}}"
+                      alt=""
+                      class="flaot-lg-start"
+                      style="width: 2rem"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div class="col">
+                <div class="clearfix px-3 my-3 w-75 mx-auto">
+                  <button
+                    type="button"
+                    class="close btn btn-outline-secondary"
+                    onClick="deleteNote()"
+                  >
+                    <img
+                      src="{{ url_for('static', filename='images/edit.svg')}}"
+                      alt=""
+                      class="float-end"
+                      style="width: 2rem"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </li>
     {% endfor %}
   </ul>
 </div>
 {% else %}
-<h1 class="text-center mx-auto my-4 p-3">{{ active_child.first_name }} doesn't seem to have any grades published yet</h1>
-{% endif %}
-{% endblock %}
+<p class="text-center mx-auto my-4 p-3 fs-2">
+  {{ active_child.first_name }} doesn't seem to have any grades published yet
+</p>
+{% endif %} {% endblock %}
