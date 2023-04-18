@@ -18,7 +18,7 @@ def home():
 def manage_child():
     if current_user.parent:
         if ParentRelationship.query.filter_by(parent_id=current_user.id).first() is None:
-            return "You get 0 bitches"
+            return render_template('no-children.html', user=current_user)
         else:
             relationship = ParentRelationship.query.filter_by(
                 parent_id=current_user.id).first()
@@ -110,6 +110,10 @@ def manage(child_id):
             parent_id=current_user.id)]
         children = [User.query.filter_by(
             id=x.child_id).first() for x in children]
+
+        if not children:
+            return redirect(url_for('views.manage_child'))
+
         active_child = User.query.filter_by(id=child_id).first()
         grade_relationships = GradeRelationship.query.filter_by(
             child_id=active_child.id)

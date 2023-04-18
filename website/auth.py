@@ -119,6 +119,6 @@ def add_child():
                 flash(
                     'Child email address or first name or last name are incorrect.', category='error')
 
-        return render_template('add child.html', user=current_user, first_name=child_first_name, last_name=child_last_name, email=child_email)
+        return render_template('add-child.html', user=current_user, first_name=child_first_name, last_name=child_last_name, email=child_email)
     else:
         return redirect(url_for('views.home'))
