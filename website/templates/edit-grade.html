@@ -1,0 +1,53 @@
+{% extends 'base.html'%} {% block title %}Home{% endblock %} {% block content %}
+<h1 class="border-dark py-4 my-1 text-center">Edit Grade</h1>
+<form method="POST" class="w-50 mx-auto mt-5">
+  <div class="row w-100 mx-auto">
+    <select
+      class="form-select col me-5"
+      aria-label="Default select example"
+      name="subject"
+    >
+      <option value="None" selected>Select Subject</option>
+      {% for subject_option in subject_options %} {% if grade.subject ==
+      subject_option %}
+      <option value="{{ subject_option }}" selected>
+        {{ subject_option }}
+      </option>
+      {% else %}
+      <option value="{{ subject_option }}">{{ subject_option }}</option>
+      {% endif %} {% endfor %}
+    </select>
+    <select class="form-select col" aria-label="Select Grade" name="grade">
+      {% for grade_option in grade_options %} {% if grade_option ==
+      grade.grade.value %}
+      <option value="{{ grade_option }}" selected>{{ grade_option }}</option>
+      {% else %}
+      <option value="{{ grade_option }}">{{ grade_option }}</option>
+      {% endif %} {% endfor %}
+    </select>
+  </div>
+  <div class="form-floating mt-4">
+    <textarea
+      class="form-control"
+      placeholder="Leave a comment here"
+      id="grade_comment"
+      name="grade_comment"
+    >
+{{ grade.grade_comment }}</textarea
+    >
+    <label for="grade_comment">Edit grade comment</label>
+  </div>
+  <div align="center">
+    <div class="row w-50">
+      <div class="col">
+        <a type="button" class="btn btn-secondary mt-4" href="/manage-child"
+          >Cancel</a
+        >
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary mt-4">Edit Grade</button>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

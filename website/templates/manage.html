@@ -9,24 +9,36 @@
       <select
         name="subject_filter"
         class="form-select"
-        aria-label="Default select example"
+        aria-label="Select Subject Filter"
       >
-        <option value="" selected>Select Subject Filter</option>
-        {% for subject in subjects %}
+        {% if subject_filter != "" %}
+        <option value="" selected>No filter</option>
+        {% else %}
+        <option value="">No filter</option>
+        {% endif %} {% for subject in subjects %} {% if subject ==
+        subject_filter %}
+        <option value="{{ subject }}" selected>{{ subject }}</option>
+        {% else %}
         <option value="{{ subject }}">{{ subject }}</option>
-        {% endfor %}
+        {% endif %} {% endfor %}
       </select>
     </div>
     <div class="col">
       <select
         name="grade_filter"
         class="form-select"
-        aria-label="Default select example"
+        aria-label="Select Grade Filter"
       >
-        <option value="" selected>Select Grade Filter</option>
-        {% for grade_option in grade_options %}
+        {% if grade_filter != "" %}
+        <option value="" selected>No filter</option>
+        {% else %}
+        <option value="">No filter</option>
+        {% endif %} {% for grade_option in grade_options %} {% if grade_option
+        == grade_filter %}
+        <option value="{{ grade_option }}" selected>{{ grade_option }}</option>
+        {% else %}
         <option value="{{ grade_option }}">{{ grade_option }}</option>
-        {% endfor %}
+        {% endif %} {% endfor %}
       </select>
     </div>
   </div>
@@ -80,31 +92,93 @@
                   <button
                     type="button"
                     class="close btn btn-outline-secondary"
-                    onClick="deleteGrade({{ grade.id }})"
+                    data-bs-toggle="modal"
+                    data-bs-target="#{{ grade.id }}Modal"
                   >
                     <img
                       src="{{ url_for('static', filename='images/delete.svg')}}"
                       alt=""
                       class="flaot-lg-start"
-                      style="width: 2rem"
+                      style="width: 1.7rem"
                     />
                   </button>
+                  <div
+                    class="modal fade"
+                    id="{{ grade.id }}Modal"
+                    tabindex="-1"
+                    aria-labelledby="{{ grade.id }}ModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1
+                            class="modal-title fs-5"
+                            id="{{ grade.id }}ModalLabel"
+                          >
+                            Delete Grade?
+                          </h1>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row row-cols-lg-2 row-cols-sm-1">
+                            <div class="row me-2">
+                              <h3 class="card-title text-center mt-3">
+                                {{ grade.subject }}
+                              </h3>
+                              <div class="card-body text-center fs-4">
+                                {{ grade.grade.value }}
+                              </div>
+                            </div>
+                            <div class="row row-cols-1">
+                              <div class="col my-auto">
+                                <div class="card-body text-center fs-5 my-auto">
+                                  {{ grade.grade_comment }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            onClick="deleteGrade({{ grade.id }})"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col">
                 <div class="clearfix px-3 my-3 w-75 mx-auto">
-                  <button
+                  <a
                     type="button"
                     class="close btn btn-outline-secondary"
-                    onClick="deleteNote()"
+                    href="/edit-grade/{{ grade.id }}"
                   >
                     <img
                       src="{{ url_for('static', filename='images/edit.svg')}}"
                       alt=""
                       class="float-end"
-                      style="width: 2rem"
+                      style="width: 1.7rem"
                     />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

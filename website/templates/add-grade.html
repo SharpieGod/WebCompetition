@@ -6,21 +6,21 @@ content %}
     <select
       class="form-select col me-5"
       aria-label="Default select example"
-      name="grade"
-    >
-      <option value="None" selected>Select Grade</option>
-      {% for grade_option in grade_options %}
-      <option value="{{ grade_option }}">{{ grade_option }}</option>
-      {% endfor %}
-    </select>
-    <select
-      class="form-select col"
-      aria-label="Default select example"
       name="subject"
     >
       <option value="None" selected>Select Subject</option>
       {% for subject_option in subject_options %}
       <option value="{{ subject_option }}">{{ subject_option }}</option>
+      {% endfor %}
+    </select>
+    <select
+      class="form-select col"
+      aria-label="Default select example"
+      name="grade"
+    >
+      <option value="None" selected>Select Grade</option>
+      {% for grade_option in grade_options %}
+      <option value="{{ grade_option }}">{{ grade_option }}</option>
       {% endfor %}
     </select>
   </div>

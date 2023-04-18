@@ -9,7 +9,9 @@ content %}
       class="form-control"
       id="child_email"
       name="child_email"
-      placeholder="Enter child's email" />
+      placeholder="Enter child's email"
+      value="{{ email }}"
+    />
   </div>
   <div class="row">
     <div class="col">
@@ -20,7 +22,9 @@ content %}
           class="form-control"
           id="childFirstName"
           name="childFirstName"
-          placeholder="Enter child's first name" />
+          placeholder="Enter child's first name"
+          value="{{ first_name }}"
+        />
       </div>
     </div>
     <div class="col">
@@ -31,7 +35,9 @@ content %}
           class="form-control"
           id="childLastName"
           name="childLastName"
-          placeholder="Enter child's last name" />
+          placeholder="Enter child's last name"
+          value="{{ last_name }}"
+        />
       </div>
     </div>
   </div>
@@ -42,7 +48,8 @@ content %}
       class="form-control"
       id="child_password"
       name="child_password"
-      placeholder="Enter your child's password" />
+      placeholder="Enter your child's password"
+    />
   </div>
   <div class="form-group mt-3">
     <label for="parent_password">Password</label>
@@ -51,7 +58,8 @@ content %}
       class="form-control"
       id="parent_password"
       name="parent_password"
-      placeholder="Enter your password" />
+      placeholder="Enter your password"
+    />
   </div>
   <br />
   <button type="submit" class="btn btn-primary mt-3">Add Child</button>

@@ -81,6 +81,7 @@ def add_grade():
         subject_options = ["Math", "Science",    "English",    "Social Studies",    "History",    "Geography",    "World History",    "US History",    "European History",    "Asian Studies",    "Latin American Studies",    "African Studies",    "Physical Education",    "Health",    "Art",    "Music",    "Drama",    "Theater",    "Film Studies",    "Media Studies",    "Journalism",    "Creative Writing",    "Computer Science",    "Programming",    "Web Development",
                            "Data Science",    "Statistics",    "Business",    "Economics",    "Marketing",    "Accounting",    "Finance",    "Foreign Languages",    "Spanish",    "French",    "German",    "Italian",    "Chinese",    "Japanese",    "Korean",    "Arabic",    "Hebrew",    "Russian",    "Portuguese",    "Biology",    "Chemistry",    "Physics",    "Environmental Science",    "Psychology",    "Sociology",    "Anthropology",    "Philosophy",    "Religious Studies"]
         subject_options = sorted(subject_options)
+
         return render_template('add-grade.html', user=current_user, grade_options=grade_options, subject_options=subject_options, grades=grades)
     else:
         return redirect(url_for('views.home'))
@@ -129,20 +130,64 @@ def manage(child_id):
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
 
-        grades = [x for x in grades if x != None]
-
         return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
 
 
+@views.route('/edit-grade/<int:grade_id>', methods=['GET', 'POST'])
+def edit_grade(grade_id):
+    if not current_user.parent:
+        return redirect(url_for('views.home'))
+
+    grade_relationship = GradeRelationship.query.filter_by(
+        grade_id=grade_id).first()
+
+    if grade_relationship is None:
+        return redirect(url_for('views.manage_child'))
+
+    grade = Grade.query.filter_by(id=grade_id).first()
+
+    grade_options = ['Extending', 'Applying',
+                     'Developing', 'Beginning', 'Insufficient Evidence']
+
+    subject_options = ["Math", "Science",    "English",    "Social Studies",    "History",    "Geography",    "World History",    "US History",    "European History",    "Asian Studies",    "Latin American Studies",    "African Studies",    "Physical Education",    "Health",    "Art",    "Music",    "Drama",    "Theater",    "Film Studies",    "Media Studies",    "Journalism",    "Creative Writing",    "Computer Science",    "Programming",    "Web Development",
+                       "Data Science",    "Statistics",    "Business",    "Economics",    "Marketing",    "Accounting",    "Finance",    "Foreign Languages",    "Spanish",    "French",    "German",    "Italian",    "Chinese",    "Japanese",    "Korean",    "Arabic",    "Hebrew",    "Russian",    "Portuguese",    "Biology",    "Chemistry",    "Physics",    "Environmental Science",    "Psychology",    "Sociology",    "Anthropology",    "Philosophy",    "Religious Studies"]
+
+    subject_options = sorted(subject_options)
+
+    if request.method == 'POST':
+        request_grade = request.form.get('grade')
+        subject = request.form.get('subject')
+        grade_comment = request.form.get('grade_comment')
+
+        if grade_comment == "":
+            flash('Grade comment cannot be empty', category='error')
+        else:
+            grade.grade = GradeEnum(request_grade)
+            grade.subject = subject
+            grade.grade_comment = grade_comment
+
+            db.session.commit()
+            return redirect(url_for('views.manage_child'))
+
+    return render_template('edit-grade.html', user=current_user, grade=grade, subject_options=subject_options, grade_options=grade_options)
+
+
 @views.route('/delete-grade', methods=['POST'])
 def delete_grade():
-    grade = json.loads(request.data)
-    gradeId = grade['gradeId']
+    grade_data = json.loads(request.data)
+    gradeId = grade_data['gradeId']
     grade = Grade.query.get(gradeId)
+    grade_relationship = GradeRelationship.query.filter_by(
+        grade_id=grade.id).first()
+    parent_relationship = ParentRelationship.query.filter_by(
+        child_id=grade_relationship.child_id).first()
+
     if grade:
-        db.session.delete(grade)
-        db.session.commit()
+        if current_user.id == parent_relationship.parent_id:
+            db.session.delete(grade)
+            db.session.delete(grade_relationship)
+            db.session.commit()
 
     return jsonify({})
