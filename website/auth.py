@@ -50,7 +50,7 @@ def sign_up():
         password2 = request.form.get('password2')
         parent = request.form.get('parent') is not None
 
-        user = User.query.filter_by(email=email, parent=parent).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             flash('Email is already in use.', category='error')
         elif len(email) < 4:
