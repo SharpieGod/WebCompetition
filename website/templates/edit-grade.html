@@ -41,7 +41,10 @@ content %}
   <div align="center">
     <div class="row w-75">
       <div class="col">
-        <a type="button" class="btn btn-secondary mt-4" href="/manage-child"
+        <a
+          type="button"
+          class="btn btn-secondary mt-4"
+          href="{{ url_for('views.manage', child_id=child_id)}}"
           >Cancel</a
         >
       </div>

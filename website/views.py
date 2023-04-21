@@ -163,6 +163,9 @@ def edit_grade(grade_id):
 
     grade = Grade.query.filter_by(id=grade_id).first()
 
+    child_id = User.query.filter_by(id=GradeRelationship.query.filter_by(
+        grade_id=grade.id).first().child_id).first().id
+
     grade_options = ['Extending', 'Applying',
                      'Developing', 'Beginning', 'Insufficient Evidence']
 
@@ -186,9 +189,9 @@ def edit_grade(grade_id):
             grade.grade_comment = grade_comment
 
             db.session.commit()
-            return redirect(url_for('views.manage_child'))
+            return redirect(url_for('views.manage', child_id=child_id))
 
-    return render_template('edit-grade.html', user=current_user, grade=grade, subject_options=subject_options, grade_options=grade_options)
+    return render_template('edit-grade.html', user=current_user, grade=grade, subject_options=subject_options, grade_options=grade_options, child_id=child_id)
 
 
 @views.route('/delete-grade', methods=['POST'])

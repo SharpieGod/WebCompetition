@@ -3,6 +3,6 @@ function deleteGrade(gradeId) {
     method: "POST",
     body: JSON.stringify({ gradeId: gradeId }),
   }).then((_res) => {
-    window.location.href = "/manage-child";
+    location.reload(true);
   });
 }
