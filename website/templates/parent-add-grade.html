@@ -1,0 +1,41 @@
+{% extends 'base.html '%}{% block title %}Add Grade To {{ child.first_name }}{%
+endblock %} {% block content %}
+<h1 class="text-center mx-auto my-4">Add Grade To {{ child.first_name }}</h1>
+
+<form method="POST" class="w-50 mx-auto mt-5">
+  <div class="row w-100 mx-auto">
+    <select
+      class="form-select col me-5"
+      aria-label="Default select example"
+      name="subject"
+    >
+      <option value="None" selected>Select Subject</option>
+      {% for subject_option in subject_options %}
+      <option value="{{ subject_option }}">{{ subject_option }}</option>
+      {% endfor %}
+    </select>
+    <select
+      class="form-select col"
+      aria-label="Default select example"
+      name="grade"
+    >
+      <option value="None" selected>Select Grade</option>
+      {% for grade_option in grade_options %}
+      <option value="{{ grade_option }}">{{ grade_option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-floating mt-4">
+    <textarea
+      class="form-control"
+      placeholder="Leave a comment here"
+      id="grade_comment"
+      name="grade_comment"
+    ></textarea>
+    <label for="grade_comment">Add grade comment</label>
+  </div>
+  <div align="center">
+    <button type="submit" class="btn btn-primary mt-4">Add Grade</button>
+  </div>
+</form>
+{% endblock %}

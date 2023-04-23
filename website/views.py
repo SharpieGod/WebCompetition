@@ -126,6 +126,19 @@ def manage(child_id):
         children = [User.query.filter_by(
             id=x.child_id).first() for x in children]
 
+        child = User.query.get(child_id)
+        if not child:
+            return redirect(url_for('views.manage_child'))
+
+        if child.parent:
+            return redirect(url_for('views.manage_child'))
+
+        if ParentRelationship.query.filter_by(child_id=child.id).first():
+            if ParentRelationship.query.filter_by(child_id=child_id).first().parent_id != current_user.id:
+                return redirect(url_for('views.manage_child'))
+        else:
+            return redirect(url_for('views.manage_child'))
+
         if not children:
             return redirect(url_for('views.manage_child'))
 
@@ -144,7 +157,9 @@ def manage(child_id):
         if grade_filter:
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
-
+            
+        if grades != []:
+            grades = reversed(grades)
         return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
@@ -192,6 +207,68 @@ def edit_grade(grade_id):
             return redirect(url_for('views.manage', child_id=child_id))
 
     return render_template('edit-grade.html', user=current_user, grade=grade, subject_options=subject_options, grade_options=grade_options, child_id=child_id)
+
+
+@views.route('/add-grade/<int:child_id>', methods=['POST', 'GET'])
+def parent_add_grade(child_id: int):
+    grade_options = ['Extending', 'Applying',
+                     'Developing', 'Beginning', 'Insufficient Evidence']
+    grades = [GradeEnum.E, GradeEnum.A,
+              GradeEnum.D, GradeEnum.B, GradeEnum.I]
+    subject_options = ["Math", "Science",    "English",    "Social Studies",    "History",    "Geography",    "World History",    "US History",    "European History",    "Asian Studies",    "Latin American Studies",    "African Studies",    "Physical Education",    "Health",    "Art",    "Music",    "Drama",    "Theater",    "Film Studies",    "Media Studies",    "Journalism",    "Creative Writing",    "Computer Science",    "Programming",    "Web Development",
+                       "Data Science",    "Statistics",    "Business",    "Economics",    "Marketing",    "Accounting",    "Finance",    "Foreign Languages",    "Spanish",    "French",    "German",    "Italian",    "Chinese",    "Japanese",    "Korean",    "Arabic",    "Hebrew",    "Russian",    "Portuguese",    "Biology",    "Chemistry",    "Physics",    "Environmental Science",    "Psychology",    "Sociology",    "Anthropology",    "Philosophy",    "Religious Studies"]
+
+    if not current_user.parent:
+        return redirect(url_for('views.home'))
+
+    child = User.query.filter_by(id=child_id).first()
+
+    if not child:
+        return redirect(url_for('views.manage_child'))
+
+    if child.parent:
+        return redirect(url_for('views.manage_child'))
+
+    if ParentRelationship.query.filter_by(child_id=child.id).first():
+        if ParentRelationship.query.filter_by(child_id=child.id).first().parent_id != current_user.id:
+            return redirect(url_for('views.manage_child'))
+    else:
+        return redirect(url_for('views.manage_child'))
+
+    if request.method == 'POST':
+        grade = request.form.get('grade')
+        subject = request.form.get('subject')
+        grade_comment = request.form.get('grade_comment')
+
+        if grade in grade_options or subject in subject_options:
+            if grade != 'None':
+                if subject != 'None':
+                    if grade_comment != '':
+                        new_grade = Grade(grade=GradeEnum(
+                            grade), subject=subject, grade_comment=grade_comment)
+                        db.session.add(new_grade)
+                        db.session.commit()
+                        new_grade_relationship = GradeRelationship(
+                            child_id=child.id, grade_id=new_grade.id)
+
+                        db.session.add(new_grade_relationship)
+                        db.session.commit()
+                        flash('Added grade successfully.', category='success')
+                        return redirect(url_for('views.grades'))
+                    else:
+                        flash('You must include a grade comment.',
+                              category='error')
+                else:
+                    flash('You must include a subject.', category='error')
+            else:
+                flash('You must include a grade.', category='error')
+        else:
+            flash('Don\'t do that please.', category='error')
+
+    if not current_user.parent:
+        subject_options = sorted(subject_options)
+
+    return render_template('parent-add-grade.html', child=child, user=current_user, grade_options=grade_options, subject_options=subject_options, grades=grades)
 
 
 @views.route('/delete-grade', methods=['POST'])

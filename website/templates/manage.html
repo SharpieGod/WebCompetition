@@ -49,7 +49,7 @@
 </form>
 <br />
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs my-4">
   {% for child in children %} {% if child.id == active_child.id %}
   <li class="nav-item">
     <a
@@ -69,8 +69,17 @@
   {% endif %} {% endfor %}
 </ul>
 <h1 class="text-center my-4 p-3">Manage {{ active_child.first_name }}</h1>
+
 {% if grades %}
-<div class="card w-50 mx-auto">
+<div align="center" class="mb-4">
+  <a
+    type="button"
+    class="btn btn-primary"
+    href="{{ url_for('views.parent_add_grade', child_id=active_child.id)}}"
+    >Add Grade</a
+  >
+</div>
+<div class="card w-50 mx-auto my-3">
   <ul class="list-group list-group-flush">
     {% for grade in grades %}
     <li class="list-group-item">
@@ -193,4 +202,12 @@
 <p class="text-center mx-auto my-4 p-3 fs-2">
   {{ active_child.first_name }} doesn't seem to have any grades published yet
 </p>
+<div align="center" class="mb-4">
+  <a
+    type="button"
+    class="btn btn-primary"
+    href="{{ url_for('views.parent_add_grade', child_id=active_child.id)}}"
+    >Add Grade</a
+  >
+</div>
 {% endif %} {% endblock %}

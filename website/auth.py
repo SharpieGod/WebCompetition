@@ -10,6 +10,8 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
     email = ''
     if request.method == 'POST':
         email = request.form.get('email').lower()
@@ -38,6 +40,9 @@ def logout():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
+
     email = ''
     first_name = ''
     last_name = ''
@@ -100,7 +105,7 @@ def add_child():
             if child_user is not None:
                 if check_password_hash(child_user.password, child_password):
                     if check_password_hash(current_user.password, parent_password):
-                        if ParentRelationship.query.filter_by(parent_id=current_user.id, child_id=child_user.id).first() is None:
+                        if ParentRelationship.query.filter_by(child_id=child_user.id).first() is None:
                             flash(
                                 f'Added {child_first_name} to children list successfully!', category='success')
                             relationship = ParentRelationship(
