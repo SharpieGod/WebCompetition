@@ -157,9 +157,10 @@ def manage(child_id):
         if grade_filter:
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
-            
+
         if grades != []:
             grades = reversed(grades)
+
         return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
@@ -254,7 +255,7 @@ def parent_add_grade(child_id: int):
                         db.session.add(new_grade_relationship)
                         db.session.commit()
                         flash('Added grade successfully.', category='success')
-                        return redirect(url_for('views.grades'))
+                        return redirect(url_for('views.manage', child_id=child_id))
                     else:
                         flash('You must include a grade comment.',
                               category='error')
@@ -265,8 +266,7 @@ def parent_add_grade(child_id: int):
         else:
             flash('Don\'t do that please.', category='error')
 
-    if not current_user.parent:
-        subject_options = sorted(subject_options)
+    subject_options = sorted(subject_options)
 
     return render_template('parent-add-grade.html', child=child, user=current_user, grade_options=grade_options, subject_options=subject_options, grades=grades)
 
