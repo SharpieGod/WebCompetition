@@ -150,18 +150,23 @@ def manage(child_id):
 
         subject_options = sorted(subject_options)
 
-        if subject_filter:
+        if subject_filter and subject_filter in subject_options:
             args["subjectFilter"] = subject_filter
             grades = [x for x in grades if x.subject == subject_filter]
 
-        if grade_filter:
+        if grade_filter and grade_filter in grade_options:
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
 
         if grades != []:
             grades = reversed(grades)
+            grades = list(grades)
 
-        return render_template('manage.html', user=current_user, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
+            grade_value = { 'Extending' : 5, 'Applying' : 4, 'Beginning' : 3, 'Developing' : 2, 'Insufficient Evidence' : 1}
+
+            grade_avg = sum([grade_value.get(x) for x in [y.grade.value for y in grades]]) / len(grades)
+
+        return render_template('manage.html', grade_avg=grade_avg, user=current_user,**args.to_dict(flat=False), children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
 
@@ -286,5 +291,4 @@ def delete_grade():
             db.session.delete(grade)
             db.session.delete(grade_relationship)
             db.session.commit()
-
     return jsonify({})
