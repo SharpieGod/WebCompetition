@@ -63,7 +63,7 @@ def add_grade():
         if grade != 'None':
             if subject != 'None':
                 if grade_comment != '':
-                    if grade in grade_options or subject in subject_options:
+                    if grade in grade_options and subject in subject_options:
                         new_grade = Grade(grade=GradeEnum(
                             grade), subject=subject, grade_comment=grade_comment)
                         db.session.add(new_grade)
@@ -205,7 +205,7 @@ def edit_grade(grade_id):
         subject = request.form.get('subject')
         grade_comment = request.form.get('grade_comment')
 
-        if request_grade not in grade_options or subject not in subject_options:
+        if request_grade not in grade_options and subject not in subject_options:
             flash('Don\'t do that', category='error')
         elif grade_comment == "":
             flash('Grade comment cannot be empty', category='error')
@@ -254,7 +254,7 @@ def parent_add_grade(child_id: int):
         if grade != 'None':
             if subject != 'None':
                 if grade_comment != '':
-                    if grade in grade_options or subject in subject_options:
+                    if grade in grade_options and subject in subject_options:
                         new_grade = Grade(grade=GradeEnum(
                             grade), subject=subject, grade_comment=grade_comment)
                         db.session.add(new_grade)

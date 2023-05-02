@@ -1,5 +1,5 @@
-{% extends 'base.html'%} {% block title %}Manage{% endblock %} {% block content
-%}
+{% extends 'base.html'%} {% block title %}Manage {{ active_child.first_name }}{%
+endblock %} {% block content %}
 <h1 class="py-4 my-1 text-center mb-3">
   Welcome to the manage page, {{ user.first_name }}.<br />
 </h1>
@@ -13,7 +13,7 @@
   >
     Filter
   </button>
-  <form method="POST" class="w-50 mx-auto dropdown-menu p-3">
+  <form method="POST" class="w-25 mx-auto dropdown-menu p-3">
     <select
       name="subject_filter"
       class="form-select mb-3"
