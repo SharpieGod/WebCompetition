@@ -3,50 +3,57 @@
 <h1 class="py-4 my-1 text-center mb-3">
   Welcome to the manage page, {{ user.first_name }}.<br />
 </h1>
-<form method="POST" class="w-75 mx-auto">
-  <div class="row">
-    <div class="col">
-      <select
-        name="subject_filter"
-        class="form-select"
-        aria-label="Select Subject Filter"
-      >
-        {% if subject_filter != "" %}
-        <option value="" selected>No filter</option>
-        {% else %}
-        <option value="">No filter</option>
-        {% endif %} {% for subject in subjects %} {% if subject ==
-        subject_filter %}
-        <option value="{{ subject }}" selected>{{ subject }}</option>
-        {% else %}
-        <option value="{{ subject }}">{{ subject }}</option>
-        {% endif %} {% endfor %}
-      </select>
+<div class="dropdown mx-auto text-center" align="center">
+  <button
+    type="button"
+    class="btn btn-primary dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    data-bs-auto-close="outside"
+  >
+    Filter
+  </button>
+  <form method="POST" class="w-50 mx-auto dropdown-menu p-3">
+    <select
+      name="subject_filter"
+      class="form-select mb-3"
+      aria-label="Select Subject Filter"
+    >
+      {% if subject_filter != "" %}
+      <option value="" selected>No filter</option>
+      {% else %}
+      <option value="">No filter</option>
+      {% endif %} {% for subject in subjects %} {% if subject == subject_filter
+      %}
+      <option value="{{ subject }}" selected>{{ subject }}</option>
+      {% else %}
+      <option value="{{ subject }}">{{ subject }}</option>
+      {% endif %} {% endfor %}
+    </select>
+    <select
+      name="grade_filter"
+      class="form-select"
+      aria-label="Select Grade Filter"
+    >
+      {% if grade_filter != "" %}
+      <option value="" selected>No filter</option>
+      {% else %}
+      <option value="">No filter</option>
+      {% endif %} {% for grade_option in grade_options %} {% if grade_option ==
+      grade_filter %}
+      <option value="{{ grade_option }}" selected>{{ grade_option }}</option>
+      {% else %}
+      <option value="{{ grade_option }}">{{ grade_option }}</option>
+      {% endif %} {% endfor %}
+    </select>
+
+    <br />
+    <div align="center">
+      <button type="submit" class="btn btn-primary">Filter</button>
     </div>
-    <div class="col">
-      <select
-        name="grade_filter"
-        class="form-select"
-        aria-label="Select Grade Filter"
-      >
-        {% if grade_filter != "" %}
-        <option value="" selected>No filter</option>
-        {% else %}
-        <option value="">No filter</option>
-        {% endif %} {% for grade_option in grade_options %} {% if grade_option
-        == grade_filter %}
-        <option value="{{ grade_option }}" selected>{{ grade_option }}</option>
-        {% else %}
-        <option value="{{ grade_option }}">{{ grade_option }}</option>
-        {% endif %} {% endfor %}
-      </select>
-    </div>
-  </div>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Filter</button>
-  </div>
-</form>
+  </form>
+</div>
+
 <br />
 <h4 class="fs-2 text-center my-3">Grade Average: {{ grade_avg }}</h4>
 <ul class="nav nav-tabs my-4">
