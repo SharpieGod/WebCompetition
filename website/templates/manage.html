@@ -32,7 +32,7 @@ endblock %} {% block content %}
     </select>
     <select
       name="grade_filter"
-      class="form-select"
+      class="form-select mb-3"
       aria-label="Select Grade Filter"
     >
       {% if grade_filter != "" %}
@@ -46,6 +46,13 @@ endblock %} {% block content %}
       <option value="{{ grade_option }}">{{ grade_option }}</option>
       {% endif %} {% endfor %}
     </select>
+    <label for="grade_comment" class="form-label">Search Comments</label>
+    <textarea
+      class="form-control"
+      placeholder=""
+      id="grade_comment"
+      name="comment_filter"
+    ></textarea>
 
     <br />
     <div align="center">

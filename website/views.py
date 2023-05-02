@@ -105,10 +105,12 @@ def manage(child_id):
     args = MultiDict()
     subject_filter = request.args.get('subjectFilter')
     grade_filter = request.args.get('gradeFilter')
+    comment_filter = request.args.get('commentFilter')
 
     if request.method == 'POST':
         subject_filter = request.form.get('subject_filter')
         grade_filter = request.form.get('grade_filter')
+        comment_filter = request.form.get('comment_filter')
 
         if subject_filter:
             if subject_filter in subject_options:
@@ -117,6 +119,9 @@ def manage(child_id):
         if grade_filter:
             if grade_filter in grade_options:
                 args['gradeFilter'] = grade_filter
+
+        if comment_filter:
+            args['commentFilter'] = comment_filter
 
         return redirect(url_for('views.manage', **args.to_dict(flat=False), child_id=child_id))
 
@@ -158,6 +163,10 @@ def manage(child_id):
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
 
+        if comment_filter:
+            args["commentFilter"] = comment_filter.lower()
+            grades = [x for x in grades if comment_filter in x.grade_comment.lower()]
+
         grade_avg = 'N/A'
 
         if grades != []:
@@ -171,7 +180,7 @@ def manage(child_id):
                             for x in [y.grade.value for y in grades]]) / len(grades)
             grade_avg = round(grade_avg, 2)
 
-        return render_template('manage.html', grade_avg=grade_avg, user=current_user, **args.to_dict(flat=False), children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
+        return render_template('manage.html', grade_avg=grade_avg, user=current_user, **args.to_dict(flat=False), comment_filter=comment_filter, children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
 
