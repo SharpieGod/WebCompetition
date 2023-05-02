@@ -59,18 +59,17 @@ def add_grade():
         grade = request.form.get('grade')
         subject = request.form.get('subject')
         grade_comment = request.form.get('grade_comment')
-        
 
         if grade != 'None':
             if subject != 'None':
                 if grade_comment != '':
                     if grade in grade_options or subject in subject_options:
                         new_grade = Grade(grade=GradeEnum(
-                        grade), subject=subject, grade_comment=grade_comment)
+                            grade), subject=subject, grade_comment=grade_comment)
                         db.session.add(new_grade)
                         db.session.commit()
                         new_grade_relationship = GradeRelationship(
-                        child_id=current_user.id, grade_id=new_grade.id)
+                            child_id=current_user.id, grade_id=new_grade.id)
 
                         db.session.add(new_grade_relationship)
                         db.session.commit()
@@ -80,12 +79,11 @@ def add_grade():
                         flash('Don\'t do that please.', category='error')
                 else:
                     flash('You must include a grade comment.',
-                category='error')
+                          category='error')
             else:
                 flash('You must include a subject.', category='error')
         else:
             flash('You must include a grade.', category='error')
-
 
     if not current_user.parent:
         subject_options = sorted(subject_options)
@@ -166,12 +164,14 @@ def manage(child_id):
             grades = reversed(grades)
             grades = list(grades)
 
-            grade_value = { 'Extending' : 4, 'Applying' : 3, 'Beginning' : 2, 'Developing' : 1, 'Insufficient Evidence' : 0}
+            grade_value = {'Extending': 4, 'Applying': 3, 'Beginning': 2,
+                           'Developing': 1, 'Insufficient Evidence': 0}
 
-            grade_avg = sum([grade_value.get(x) for x in [y.grade.value for y in grades]]) / len(grades)
+            grade_avg = sum([grade_value.get(x)
+                            for x in [y.grade.value for y in grades]]) / len(grades)
             grade_avg = round(grade_avg, 2)
 
-        return render_template('manage.html', grade_avg=grade_avg, user=current_user,**args.to_dict(flat=False), children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
+        return render_template('manage.html', grade_avg=grade_avg, user=current_user, **args.to_dict(flat=False), children=children, active_child=active_child, grades=grades, subjects=subject_options, grade_options=grade_options, subject_filter=subject_filter, grade_filter=grade_filter)
     else:
         return redirect('views.home')
 
@@ -251,7 +251,6 @@ def parent_add_grade(child_id: int):
         subject = request.form.get('subject')
         grade_comment = request.form.get('grade_comment')
 
-
         if grade != 'None':
             if subject != 'None':
                 if grade_comment != '':
@@ -271,12 +270,11 @@ def parent_add_grade(child_id: int):
                         flash('Don\'t do that please.', category='error')
                 else:
                     flash('You must include a grade comment.',
-                            category='error')
+                          category='error')
             else:
                 flash('You must include a subject.', category='error')
         else:
             flash('You must include a grade.', category='error')
-
 
     subject_options = sorted(subject_options)
 
