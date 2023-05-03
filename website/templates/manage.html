@@ -3,6 +3,7 @@ endblock %} {% block content %}
 <h1 class="py-4 my-1 text-center mb-3">
   Welcome to the manage page, {{ user.first_name }}.<br />
 </h1>
+
 <div class="dropdown mx-auto text-center" align="center">
   <button
     type="button"
@@ -82,7 +83,7 @@ endblock %} {% block content %}
   </li>
   {% endif %} {% endfor %}
 </ul>
-<h4 class="text-center my-4 p-3">Manage {{ active_child.first_name }}</h4>
+<h4 class="text-center mt-4 mb-2 p-3">Manage {{ active_child.first_name }}</h4>
 
 {% if grades %}
 <div align="center" class="mb-4">
@@ -207,7 +208,7 @@ endblock %} {% block content %}
   </ul>
 </div>
 {% else %}
-<p class="text-center mx-auto my-4 p-3 fs-2">
+<p class="text-center mx-auto my-2 p-3 fs-4">
   {{ active_child.first_name }} doesn't seem to have any grades published yet
 </p>
 <div align="center" class="mb-4">
