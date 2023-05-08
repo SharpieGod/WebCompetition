@@ -38,6 +38,9 @@ def grades():
         for grade_relationship in grade_relationships:
             grades.append(Grade.query.filter_by(
                 id=grade_relationship.grade_id).first())
+            
+        if grades:
+            grades = reversed(grades)
 
         return render_template('grades.html', user=current_user, grades=grades)
     else:
@@ -211,6 +214,8 @@ def edit_grade(grade_id):
             flash('Don\'t do that', category='error')
         elif grade_comment == "":
             flash('Grade comment cannot be empty', category='error')
+        elif len(grade_comment) > 120:
+            flash('Grade comment cannot be longer than 120 characters', category='error')
         else:
             grade.grade = GradeEnum(request_grade)
             grade.subject = subject
