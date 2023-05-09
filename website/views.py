@@ -38,7 +38,7 @@ def grades():
         for grade_relationship in grade_relationships:
             grades.append(Grade.query.filter_by(
                 id=grade_relationship.grade_id).first())
-            
+
         if grades:
             grades = reversed(grades)
 
@@ -110,10 +110,12 @@ def manage(child_id):
     args = MultiDict()
     subject_filter = request.args.get('subjectFilter')
     grade_filter = request.args.get('gradeFilter')
+    comment_filter = request.args.get('commentFilter')
 
     if request.method == 'POST':
         subject_filter = request.form.get('subject_filter')
         grade_filter = request.form.get('grade_filter')
+        comment_filter = request.form.get('comment_filter')
 
         if subject_filter:
             if subject_filter in subject_options:
@@ -122,6 +124,9 @@ def manage(child_id):
         if grade_filter:
             if grade_filter in grade_options:
                 args['gradeFilter'] = grade_filter
+
+        if comment_filter:
+            args['commentFilter'] = comment_filter
 
         return redirect(url_for('views.manage', **args.to_dict(flat=False), child_id=child_id))
 
@@ -162,6 +167,10 @@ def manage(child_id):
         if grade_filter and grade_filter in grade_options:
             args["gradeFilter"] = grade_filter
             grades = [x for x in grades if x.grade.value == grade_filter]
+
+        if comment_filter:
+            args["commentFilter"] = comment_filter
+            grades = [x for x in grades if comment_filter in x.grade_comment]
 
         grade_avg = 'N/A'
 
@@ -215,7 +224,8 @@ def edit_grade(grade_id):
         elif grade_comment == "":
             flash('Grade comment cannot be empty', category='error')
         elif len(grade_comment) > 120:
-            flash('Grade comment cannot be longer than 120 characters', category='error')
+            flash('Grade comment cannot be longer than 120 characters',
+                  category='error')
         else:
             grade.grade = GradeEnum(request_grade)
             grade.subject = subject
