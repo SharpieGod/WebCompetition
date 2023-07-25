@@ -5,23 +5,23 @@ from enum import Enum
 
 
 class GradeEnum(Enum):
-    E = 'Extending'
-    A = 'Applying'
-    D = 'Developing'
-    B = 'Beginning'
-    I = 'Insufficient Evidence'
+    E = "Extending"
+    A = "Applying"
+    D = "Developing"
+    B = "Beginning"
+    I = "Insufficient Evidence"
 
 
 class ParentRelationship(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    child_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    parent_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    child_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
 
 class GradeRelationship(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    child_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    grade_id = db.Column(db.Integer, db.ForeignKey('grade.id'))
+    child_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    grade_id = db.Column(db.Integer, db.ForeignKey("grade.id"))
 
 
 class Grade(db.Model):
